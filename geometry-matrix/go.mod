@@ -1,4 +1,4 @@
-module github.com/antoniomo/ebiten-tutorials/geometry-matrix
+module github.com/antoniomo/ebiten-exercises/geometry-matrix
 
 go 1.14
 

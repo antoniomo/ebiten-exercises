@@ -1,4 +1,4 @@
-module github.com/antoniomo/ebiten-tutorials/basic-input
+module github.com/antoniomo/ebiten-exercises/basic-input
 
 go 1.14
 

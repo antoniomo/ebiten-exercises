@@ -1,4 +1,4 @@
-module github.com/antoniomo/ebiten-tutorials/fill
+module github.com/antoniomo/ebiten-exercises/fill
 
 go 1.14
 

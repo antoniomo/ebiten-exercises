@@ -1,4 +1,4 @@
-module github.com/antoniomo/ebiten-tutorials/stars
+module github.com/antoniomo/ebiten-exercises/polygon-making
 
 go 1.14
 

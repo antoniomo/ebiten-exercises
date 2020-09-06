@@ -1,4 +1,4 @@
-module github.com/antoniomo/ebiten-tutorials/render
+module github.com/antoniomo/ebiten-exercises/render
 
 go 1.14
 

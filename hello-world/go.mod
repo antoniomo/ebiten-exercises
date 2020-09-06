@@ -1,4 +1,4 @@
-module github.com/antoniomo/ebiten-tutorials/hello-world
+module github.com/antoniomo/ebiten-exercises/hello-world
 
 go 1.14
 
