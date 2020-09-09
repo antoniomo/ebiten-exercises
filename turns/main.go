@@ -35,7 +35,13 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Hello, World!")
-	ebiten.SetMaxTPS(20) // Turn based so this is to reduce the load
+	// It seems tempting to reduce TPS to use lower CPU on turn based games,
+	// but unless the update logic is very heavy, it won't make much
+	// difference and it might actually feel awkward with the player input
+	// or window resizing, etc.
+	// For _very_ heavy (think, a chess engine) logic, you might want to do
+	// that on separate goroutines and keep TPS at the default anyway.
+	// ebiten.SetMaxTPS(20)
 
 	if err := ebiten.RunGame(&Game{}); err != nil {
 		log.Fatal(err)
