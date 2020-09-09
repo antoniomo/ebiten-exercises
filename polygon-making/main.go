@@ -27,17 +27,68 @@ var (
 
 func init() {
 	emptyImage, _ = ebiten.NewImage(1, 1, ebiten.FilterDefault)
-	emptyImage.Fill(color.White)
+	_ = emptyImage.Fill(color.White)
+}
+
+// colorScale taken from ebitenutil/shapes.go
+func colorScale(clr color.Color) (rf, gf, bf, af float64) {
+	r, g, b, a := clr.RGBA()
+	if a == 0 {
+		return 0, 0, 0, 0
+	}
+
+	rf = float64(r) / float64(a)
+	gf = float64(g) / float64(a)
+	bf = float64(b) / float64(a)
+	af = float64(a) / 0xffff
+
+	return
+}
+
+func genTriangle(width, height int) ([]ebiten.Vertex, []uint16) {
+	vs := []ebiten.Vertex{
+		{
+			DstX:   0,
+			DstY:   float32(height),
+			SrcX:   0,
+			SrcY:   0,
+			ColorR: 1,
+			ColorG: 1,
+			ColorB: 1,
+			ColorA: 1,
+		},
+		{
+			DstX:   float32(width) / 2,
+			DstY:   0,
+			SrcX:   0,
+			SrcY:   0,
+			ColorR: 1,
+			ColorG: 1,
+			ColorB: 1,
+			ColorA: 1,
+		},
+		{
+			DstX:   float32(width),
+			DstY:   float32(height),
+			SrcX:   0,
+			SrcY:   0,
+			ColorR: 1,
+			ColorG: 1,
+			ColorB: 1,
+			ColorA: 1,
+		},
+	}
+
+	indices := []uint16{0, 1, 2}
+
+	return vs, indices
 }
 
 // Based on ebiten polygons example. This is just approximate.
-func genPolygon(radius, num int, color color.RGBA) ([]ebiten.Vertex, []uint16) {
+// An alternative is with image.ReplacePixels like:
+// https://github.com/shnifer/nigiri/blob/master/circle.go
+func genPolygon(radius, num int) ([]ebiten.Vertex, []uint16) {
 	vs := make([]ebiten.Vertex, num+1)
-
-	r := float32(color.R) / 0xff
-	g := float32(color.G) / 0xff
-	b := float32(color.B) / 0xff
-	a := float32(color.A) / 0xff
 
 	for i := 0; i < num; i++ {
 		rate := float64(i) / float64(num)
@@ -47,10 +98,10 @@ func genPolygon(radius, num int, color color.RGBA) ([]ebiten.Vertex, []uint16) {
 			DstY:   float32(float64(radius)*math.Sin(2*math.Pi*rate)) + float32(radius),
 			SrcX:   0,
 			SrcY:   0,
-			ColorR: r,
-			ColorG: g,
-			ColorB: b,
-			ColorA: a,
+			ColorR: 1,
+			ColorG: 1,
+			ColorB: 1,
+			ColorA: 1,
 		}
 	}
 
@@ -59,10 +110,10 @@ func genPolygon(radius, num int, color color.RGBA) ([]ebiten.Vertex, []uint16) {
 		DstY:   float32(radius),
 		SrcX:   0,
 		SrcY:   0,
-		ColorR: r,
-		ColorG: g,
-		ColorB: b,
-		ColorA: a,
+		ColorR: 1,
+		ColorG: 1,
+		ColorB: 1,
+		ColorA: 1,
 	}
 
 	indices := []uint16{}
@@ -82,8 +133,17 @@ type Polygon struct {
 	img    *ebiten.Image
 }
 
-func NewPolygon(id string, x, y int, theta float64, radius, sides int, clr color.RGBA) *Polygon {
-	vs, indices := genPolygon(radius, sides, clr)
+func NewPolygon(id string, x, y int, theta float64, radius, sides int,
+	clr color.Color) *Polygon {
+	var (
+		vs      []ebiten.Vertex
+		indices []uint16
+	)
+	if sides == 3 {
+		vs, indices = genTriangle(radius*2, radius*2)
+	} else {
+		vs, indices = genPolygon(radius, sides)
+	}
 
 	p := &Polygon{
 		id:     id,
@@ -92,8 +152,11 @@ func NewPolygon(id string, x, y int, theta float64, radius, sides int, clr color
 		radius: radius,
 		theta:  theta,
 	}
+	dto := &ebiten.DrawTrianglesOptions{}
+	dto.ColorM.Scale(colorScale(clr))
+
 	p.img, _ = ebiten.NewImage(radius*2, radius*2, ebiten.FilterDefault)
-	p.img.DrawTriangles(vs, indices, emptyImage, nil)
+	p.img.DrawTriangles(vs, indices, emptyImage, dto)
 	return p
 }
 
@@ -221,7 +284,7 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenW, screenH int) {
 func main() {
 	g := &Game{
 		p: []*Polygon{
-			NewPolygon("Triangle", 0, 10, 0, 20, 3, color.RGBA{0xff, 0xff, 0xff, 0xff}),
+			NewPolygon("Triangle", 0, 10, 0, 20, 3, color.White),
 			NewPolygon("Pentagon", 50, 50, 0, 20, 5, color.RGBA{0xff, 0, 0, 0xff}),
 			NewPolygon("Circle", 100, 100, 0, 20, 8, color.RGBA{0x00, 0xff, 0, 0xff}),
 		},
