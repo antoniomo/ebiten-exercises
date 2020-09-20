@@ -167,7 +167,7 @@ func (p *Polygon) In(x, y int) bool {
 	// 	y >= p.y-p.radius && y <= p.y+p.radius {
 	// 	return true
 	// }
-
+	//
 	// return false
 	return p.img.At(x-p.x+p.radius, y-p.y+p.radius).(color.RGBA).A > 0
 }
@@ -286,7 +286,7 @@ func main() {
 		p: []*Polygon{
 			NewPolygon("Triangle", 0, 10, 0, 20, 3, color.White),
 			NewPolygon("Pentagon", 50, 50, 0, 20, 5, color.RGBA{0xff, 0, 0, 0xff}),
-			NewPolygon("Circle", 100, 100, 0, 20, 8, color.RGBA{0x00, 0xff, 0, 0xff}),
+			NewPolygon("Circle", 100, 100, 0, 20, 8, color.RGBA{0, 0xff, 0, 0xff}),
 		},
 	}
 
