@@ -14,12 +14,15 @@ import (
 )
 
 const (
-	screenWidth   = 640
-	screenHeight  = 480
+	screenWidth  = 640
+	screenHeight = 480
+	// Very simplistic 2-layer parallax. Of course this could be fully
+	// dynamic with translate speed based on distance, and each star it's
+	// own distance...
 	translateNear = 3
 	translateFar  = 1
-	nearStars     = 25
-	farStars      = 25
+	nearStars     = 50
+	farStars      = 100
 )
 
 var (
