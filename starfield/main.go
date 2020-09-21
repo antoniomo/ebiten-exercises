@@ -94,6 +94,23 @@ func (s *Star) In(x, y int) bool {
 func (s *Star) MoveBy(x, y int) {
 	s.x += x
 	s.y += y
+
+	// Circular stars
+	if s.x > screenWidth {
+		s.x = 0
+	}
+
+	if s.x < 0 {
+		s.x = screenWidth
+	}
+
+	if s.y > screenHeight {
+		s.y = 0
+	}
+
+	if s.y < 0 {
+		s.y = screenHeight
+	}
 }
 
 func (s *Star) Draw(screen *ebiten.Image) {
