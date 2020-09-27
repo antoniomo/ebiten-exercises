@@ -65602,15 +65602,17 @@ $packages["."] = (function() {
 		this.radius = radius_;
 		this.img = img_;
 	});
-	Game = $pkg.Game = $newType(0, $kindStruct, "main.Game", true, ".", true, function(fullscreen_, nearStars_, farStars_) {
+	Game = $pkg.Game = $newType(0, $kindStruct, "main.Game", true, ".", true, function(fullscreen_, autoscroll_, nearStars_, farStars_) {
 		this.$val = this;
 		if (arguments.length === 0) {
 			this.fullscreen = false;
+			this.autoscroll = false;
 			this.nearStars = sliceType$1.nil;
 			this.farStars = sliceType$1.nil;
 			return;
 		}
 		this.fullscreen = fullscreen_;
+		this.autoscroll = autoscroll_;
 		this.nearStars = nearStars_;
 		this.farStars = farStars_;
 	});
@@ -65747,8 +65749,8 @@ $packages["."] = (function() {
 	};
 	Game.prototype.MoveView = function(x, y) { return this.$val.MoveView(x, y); };
 	Game.ptr.prototype.Update = function(screen) {
-		var _r, _r$1, _r$2, _r$3, _r$4, _r$5, _r$6, _r$7, _r$8, _r$9, _v, _v$1, _v$2, _v$3, g, screen, $s, $r;
-		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; _r$1 = $f._r$1; _r$2 = $f._r$2; _r$3 = $f._r$3; _r$4 = $f._r$4; _r$5 = $f._r$5; _r$6 = $f._r$6; _r$7 = $f._r$7; _r$8 = $f._r$8; _r$9 = $f._r$9; _v = $f._v; _v$1 = $f._v$1; _v$2 = $f._v$2; _v$3 = $f._v$3; g = $f.g; screen = $f.screen; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		var _r, _r$1, _r$10, _r$2, _r$3, _r$4, _r$5, _r$6, _r$7, _r$8, _r$9, _v, _v$1, _v$2, _v$3, g, screen, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; _r$1 = $f._r$1; _r$10 = $f._r$10; _r$2 = $f._r$2; _r$3 = $f._r$3; _r$4 = $f._r$4; _r$5 = $f._r$5; _r$6 = $f._r$6; _r$7 = $f._r$7; _r$8 = $f._r$8; _r$9 = $f._r$9; _v = $f._v; _v$1 = $f._v$1; _v$2 = $f._v$2; _v$3 = $f._v$3; g = $f.g; screen = $f.screen; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
 		g = this;
 		_r = ebiten.IsKeyPressed(102); /* */ $s = 4; case 4: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
 		if (_r) { _v = true; $s = 3; continue s; }
@@ -65772,9 +65774,9 @@ $packages["."] = (function() {
 		if (_r$4) { _v$2 = true; $s = 13; continue s; }
 		_r$5 = ebiten.IsKeyPressed(10); /* */ $s = 15; case 15: if($c) { $c = false; _r$5 = _r$5.$blk(); } if (_r$5 && _r$5.$blk !== undefined) { break s; }
 		_v$2 = _r$5; case 13:
-		/* */ if (_v$2) { $s = 11; continue; }
+		/* */ if (_v$2 || g.autoscroll) { $s = 11; continue; }
 		/* */ $s = 12; continue;
-		/* if (_v$2) { */ case 11:
+		/* if (_v$2 || g.autoscroll) { */ case 11:
 			g.MoveView(-1, 0);
 		/* } */ case 12:
 		_r$6 = ebiten.IsKeyPressed(92); /* */ $s = 19; case 19: if($c) { $c = false; _r$6 = _r$6.$blk(); } if (_r$6 && _r$6.$blk !== undefined) { break s; }
@@ -65786,21 +65788,27 @@ $packages["."] = (function() {
 		/* if (_v$3) { */ case 16:
 			g.MoveView(1, 0);
 		/* } */ case 17:
-		_r$8 = inpututil.IsKeyJustPressed(15); /* */ $s = 23; case 23: if($c) { $c = false; _r$8 = _r$8.$blk(); } if (_r$8 && _r$8.$blk !== undefined) { break s; }
+		_r$8 = inpututil.IsKeyJustPressed(16); /* */ $s = 23; case 23: if($c) { $c = false; _r$8 = _r$8.$blk(); } if (_r$8 && _r$8.$blk !== undefined) { break s; }
 		/* */ if (_r$8) { $s = 21; continue; }
 		/* */ $s = 22; continue;
 		/* if (_r$8) { */ case 21:
-			g.fullscreen = !g.fullscreen;
-			$r = ebiten.SetFullscreen(g.fullscreen); /* */ $s = 24; case 24: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+			g.autoscroll = !g.autoscroll;
 		/* } */ case 22:
-		_r$9 = ebiten.IsKeyPressed(46); /* */ $s = 27; case 27: if($c) { $c = false; _r$9 = _r$9.$blk(); } if (_r$9 && _r$9.$blk !== undefined) { break s; }
-		/* */ if (_r$9) { $s = 25; continue; }
-		/* */ $s = 26; continue;
-		/* if (_r$9) { */ case 25:
+		_r$9 = inpututil.IsKeyJustPressed(15); /* */ $s = 26; case 26: if($c) { $c = false; _r$9 = _r$9.$blk(); } if (_r$9 && _r$9.$blk !== undefined) { break s; }
+		/* */ if (_r$9) { $s = 24; continue; }
+		/* */ $s = 25; continue;
+		/* if (_r$9) { */ case 24:
+			g.fullscreen = !g.fullscreen;
+			$r = ebiten.SetFullscreen(g.fullscreen); /* */ $s = 27; case 27: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		/* } */ case 25:
+		_r$10 = ebiten.IsKeyPressed(46); /* */ $s = 30; case 30: if($c) { $c = false; _r$10 = _r$10.$blk(); } if (_r$10 && _r$10.$blk !== undefined) { break s; }
+		/* */ if (_r$10) { $s = 28; continue; }
+		/* */ $s = 29; continue;
+		/* if (_r$10) { */ case 28:
 			$s = -1; return $pkg.ErrCleanExit;
-		/* } */ case 26:
+		/* } */ case 29:
 		$s = -1; return $ifaceNil;
-		/* */ } return; } if ($f === undefined) { $f = { $blk: Game.ptr.prototype.Update }; } $f._r = _r; $f._r$1 = _r$1; $f._r$2 = _r$2; $f._r$3 = _r$3; $f._r$4 = _r$4; $f._r$5 = _r$5; $f._r$6 = _r$6; $f._r$7 = _r$7; $f._r$8 = _r$8; $f._r$9 = _r$9; $f._v = _v; $f._v$1 = _v$1; $f._v$2 = _v$2; $f._v$3 = _v$3; $f.g = g; $f.screen = screen; $f.$s = $s; $f.$r = $r; return $f;
+		/* */ } return; } if ($f === undefined) { $f = { $blk: Game.ptr.prototype.Update }; } $f._r = _r; $f._r$1 = _r$1; $f._r$10 = _r$10; $f._r$2 = _r$2; $f._r$3 = _r$3; $f._r$4 = _r$4; $f._r$5 = _r$5; $f._r$6 = _r$6; $f._r$7 = _r$7; $f._r$8 = _r$8; $f._r$9 = _r$9; $f._v = _v; $f._v$1 = _v$1; $f._v$2 = _v$2; $f._v$3 = _v$3; $f.g = g; $f.screen = screen; $f.$s = $s; $f.$r = $r; return $f;
 	};
 	Game.prototype.Update = function(screen) { return this.$val.Update(screen); };
 	Game.ptr.prototype.Draw = function(screen) {
@@ -65880,7 +65888,7 @@ $packages["."] = (function() {
 	main = function() {
 		var _r, _r$1, _r$2, err, g, $s, $r;
 		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; _r$1 = $f._r$1; _r$2 = $f._r$2; err = $f.err; g = $f.g; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
-		g = new Game.ptr(false, sliceType$1.nil, sliceType$1.nil);
+		g = new Game.ptr(false, false, sliceType$1.nil, sliceType$1.nil);
 		$r = g.initStarfield(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 		$r = ebiten.SetWindowSize(640, 480); /* */ $s = 2; case 2: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 		$r = ebiten.SetWindowTitle("Starfield"); /* */ $s = 3; case 3: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
@@ -65905,7 +65913,7 @@ $packages["."] = (function() {
 	ptrType$3.methods = [{prop: "In", name: "In", pkg: "", typ: $funcType([$Int, $Int], [$Bool], false)}, {prop: "MoveBy", name: "MoveBy", pkg: "", typ: $funcType([$Int, $Int], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([ptrType], [], false)}];
 	ptrType$4.methods = [{prop: "MoveView", name: "MoveView", pkg: "", typ: $funcType([$Int, $Int], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([ptrType], [$error], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([ptrType], [], false)}, {prop: "Layout", name: "Layout", pkg: "", typ: $funcType([$Int, $Int], [$Int, $Int], false)}, {prop: "initStarfield", name: "initStarfield", pkg: ".", typ: $funcType([], [], false)}];
 	Star.init(".", [{prop: "x", name: "x", embedded: false, exported: false, typ: $Int, tag: ""}, {prop: "y", name: "y", embedded: false, exported: false, typ: $Int, tag: ""}, {prop: "radius", name: "radius", embedded: false, exported: false, typ: $Int, tag: ""}, {prop: "img", name: "img", embedded: false, exported: false, typ: ptrType, tag: ""}]);
-	Game.init(".", [{prop: "fullscreen", name: "fullscreen", embedded: false, exported: false, typ: $Bool, tag: ""}, {prop: "nearStars", name: "nearStars", embedded: false, exported: false, typ: sliceType$1, tag: ""}, {prop: "farStars", name: "farStars", embedded: false, exported: false, typ: sliceType$1, tag: ""}]);
+	Game.init(".", [{prop: "fullscreen", name: "fullscreen", embedded: false, exported: false, typ: $Bool, tag: ""}, {prop: "autoscroll", name: "autoscroll", embedded: false, exported: false, typ: $Bool, tag: ""}, {prop: "nearStars", name: "nearStars", embedded: false, exported: false, typ: sliceType$1, tag: ""}, {prop: "farStars", name: "farStars", embedded: false, exported: false, typ: sliceType$1, tag: ""}]);
 	$init = function() {
 		$pkg.$init = function() {};
 		/* */ var $f, $c = false, $s = 0, $r; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:

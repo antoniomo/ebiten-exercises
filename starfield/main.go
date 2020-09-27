@@ -125,6 +125,7 @@ func (s *Star) Draw(screen *ebiten.Image) {
 
 type Game struct {
 	fullscreen bool
+	autoscroll bool
 	nearStars  []*Star
 	farStars   []*Star
 }
@@ -147,12 +148,17 @@ func (g *Game) Update(screen *ebiten.Image) error {
 		g.MoveView(0, 1)
 	}
 
-	if ebiten.IsKeyPressed(ebiten.KeyLeft) || ebiten.IsKeyPressed(ebiten.KeyA) {
+	if ebiten.IsKeyPressed(ebiten.KeyLeft) || ebiten.IsKeyPressed(ebiten.KeyA) || g.autoscroll {
 		g.MoveView(-1, 0)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyRight) || ebiten.IsKeyPressed(ebiten.KeyD) {
 		g.MoveView(1, 0)
+	}
+
+	if inpututil.IsKeyJustPressed(ebiten.KeyG) {
+		// "go", toggle autoscroll
+		g.autoscroll = !g.autoscroll
 	}
 
 	if inpututil.IsKeyJustPressed(ebiten.KeyF) {
