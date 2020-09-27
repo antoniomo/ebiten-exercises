@@ -9,6 +9,10 @@ import (
 	"math/rand"
 	"time"
 
+	// gopherjs uses go 1.12, therefore we don't have errors.Is out
+	// of the box
+	"golang.org/x/xerrors"
+
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/inpututil"
 )
@@ -209,7 +213,9 @@ func main() {
 	ebiten.SetWindowTitle("Starfield")
 
 	if err := ebiten.RunGame(g); err != nil {
-		if errors.Is(err, ErrCleanExit) {
+		// gopherjs uses go 1.12, therefore we don't have errors.Is out
+		// of the box
+		if xerrors.Is(err, ErrCleanExit) {
 			fmt.Println("Good bye!")
 
 			return
